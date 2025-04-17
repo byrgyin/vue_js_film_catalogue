@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import {computed, ref} from "vue";
+import {ref} from "vue";
 import type {IFilm} from "../types/film.ts";
 import {fetchSearchResultsFilms} from "../../api/fetchFilms.ts";
 import {calculateTime} from "../../api/calculateTime.ts";
@@ -36,8 +36,8 @@ const emit = defineEmits<{
 
 const searchQuery = ref<string>('');
 const searchResult = ref<IFilm[]>();
-let runtime = ref<string>('');
-let ratingFilm = ref<string>('');
+// let runtime = ref<string>('');
+// let ratingFilm = ref<string>('');
 const getArrayFilms = async ():Promise<void>=>{
   if(searchQuery.value.trim() === ''){
     searchResult.value = [];
@@ -51,9 +51,11 @@ const cancelStandadrForm = (event:Event):void=>{
   event.preventDefault();
 }
 const disableSearch = (event:Event):void=>{
-  if(!event.target.closest('.form-search__input')){
-    emit('update:isOpenForm',false);
-    searchResult.value = [];
+  if(event.target instanceof HTMLInputElement){
+    if(!event.target.closest('.form-search__input')){
+      emit('update:isOpenForm',false);
+      searchResult.value = [];
+    }
   }
 }
 </script>

@@ -22,7 +22,7 @@ interface arrayLink{
   link:string;
   img:string;
 }
-const arraySocLink: ArrayLink[] = [
+const arraySocLink: arrayLink[] = [
   {
     alt:'vk',
     link:'https://www.google.com/',

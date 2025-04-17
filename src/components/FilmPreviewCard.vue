@@ -22,10 +22,12 @@ const emit = defineEmits<{
   (e: 'update:reloadFavoritesFilm', value: boolean): void;
 }>();
 const removeFilm = async (event:Event): Promise<any>=>{
-  const idFilm = Number(event.currentTarget.getAttribute('data-id'));
-  const res = await removeFavoriteFilms(idFilm);
-  console.log(res)
-  emit('update:reloadFavoritesFilm', true);
+  if(event.currentTarget instanceof HTMLElement){
+    const idFilm = Number(event.currentTarget.getAttribute('data-id'));
+    const res = await removeFavoriteFilms(idFilm);
+    console.log(res)
+    emit('update:reloadFavoritesFilm', true);
+  }
 }
 </script>
 
