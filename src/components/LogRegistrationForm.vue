@@ -36,13 +36,13 @@
 </template>
 
 <script setup lang="ts">
-import {ref,nextTick} from "vue";
+import {ref} from "vue";
 import {regisrationEvent,loginEvent} from "../../api/authToServer.ts";
 
 
 const props = defineProps<{
   showLogRegForm:boolean;
-  imLogIn:boolean;
+  // imLogIn:boolean;
 }>();
 const emit = defineEmits<{
   (e:'update:showLogRegForm', value: boolean):void;

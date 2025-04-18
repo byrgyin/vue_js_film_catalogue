@@ -76,25 +76,28 @@
 </template>
 
 <script setup lang="ts">
-import {useRoute, useRouter} from "vue-router";
-import {computed, ref} from "vue";
+import {useRoute} from "vue-router";
+import {ref} from "vue";
 import {fetchRandomFilm,fetchFilm} from "../../api/fetchFilms.ts";
 import type {IFilm} from "../types/film.ts";
-import type {IUser} from "../types/user.ts";
 import {calculateTime} from "../../api/calculateTime.ts";
 import {calculateRatingFilm} from "../../api/calculateRatingFilm.ts";
 import PopUpVideo from "./PopUpVideo.vue";
 import formatMoney from "../../api/formatMoney.ts";
 import {useAuthStore} from "../stores/authStores.ts";
-import {addFavoriteFilms, getFavoriteFilms, profileEvent, removeFavoriteFilms} from "../../api/authToServer.ts";
+import {getFavoriteFilms, profileEvent} from "../../api/authToServer.ts";
 import LogRegistrationForm from "./LogRegistrationForm.vue";
 
+interface Rating {
+  color: string;
+  num: string;
+}
 
-const film = ref<IFilm>();
-let User = ref<IUser>();
+
+const film = ref<IFilm | null>(null);
 const filmsFavorite = ref<IFilm[]>()
 let runtime = ref<string>('');
-let ratingFilm = ref<string>('')
+const ratingFilm = ref<Rating>({ color: '', num: '' });
 let loading = ref<boolean>(false);
 let showPopUp = ref<boolean>(false);
 let catchIdVideo = ref<string>('');
@@ -102,16 +105,20 @@ let budget = ref<string>('');
 let revenue = ref<string>('');
 let addedFilm = ref<boolean>(false);
 let showLogRegForm = ref<boolean>(false);
+
 const loadFilmRandom = async ():Promise<void>=>{
   const res = await fetchRandomFilm();
   film.value = res;
-  runtime.value = calculateTime(film.value.runtime);
-  ratingFilm.value = calculateRatingFilm(film.value.tmdbRating);
-  loading.value = true;
-  if(useAuthStore().isAuthorized){
-    await getAllFavoriteFilms(film?.value.id)
+  if (film.value) {
+    runtime.value = calculateTime(film.value.runtime);
+    ratingFilm.value = calculateRatingFilm(film.value.tmdbRating);
+    loading.value = true;
+    if(useAuthStore().isAuthorized){
+      await getAllFavoriteFilms(film?.value.id)
+    }
   }
-}
+};
+
 const getAllFavoriteFilms = async(id:number):Promise<void>=>{
   filmsFavorite.value = await getFavoriteFilms();
   filmsFavorite.value?.forEach(item=>{
@@ -119,51 +126,60 @@ const getAllFavoriteFilms = async(id:number):Promise<void>=>{
       addedFilm.value = true;
     }
   })
-}
+};
+
 const loadFilm = async (movieId:number):Promise<void>=>{
   const res = await fetchFilm(movieId);
   film.value = res;
-  runtime.value = calculateTime(film.value.runtime);
-  ratingFilm.value = calculateRatingFilm(film.value.tmdbRating);
-  budget.value = formatMoney(film.value.budget);
-  revenue.value = formatMoney(film.value.revenue);
-  loading.value = true;
-  if(useAuthStore().isAuthorized){
-    await getAllFavoriteFilms(film.value.id)
+  if(film.value) {
+    runtime.value = calculateTime(film.value.runtime);
+    ratingFilm.value = calculateRatingFilm(film.value.tmdbRating);
+    budget.value = formatMoney(film.value.budget);
+    revenue.value = formatMoney(film.value.revenue);
+    loading.value = true;
+    if(useAuthStore().isAuthorized){
+      await getAllFavoriteFilms(film.value.id)
+    }
   }
-}
-const callPopUp = (event):void=>{
-  const IdYouTube:string = event.target.getAttribute('data-urlvideo');
+};
+
+const callPopUp = (event: Event):void=>{
+  const target = event.target as HTMLElement;
+  const IdYouTube:string = target.getAttribute('data-urlvideo') || '';
   showPopUp.value = true;
   catchIdVideo.value = IdYouTube;
-}
-const toggleFilm = async (event:Event): Promise<any>=>{
+};
+
+const toggleFilm = async (event: Event): Promise<void>=>{
+  const target = event.currentTarget as HTMLElement;
   const filmId = {
-    id:event.currentTarget.getAttribute('data-id-film')
+    id:target.getAttribute('data-id-film') || ''
   },
-  movieAdded = event.currentTarget.getAttribute('data-addfilm') === "true";
+  movieAdded = target.getAttribute('data-addfilm') === "true";
   if(!movieAdded){
-    const res = await addFavoriteFilms(filmId);
+    // const res = await addFavoriteFilms(filmId);
     addedFilm.value = true;
   } else {
-    const res = await removeFavoriteFilms(filmId.id);
+    // const res = await removeFavoriteFilms(filmId.id);
     addedFilm.value = false;
   }
-}
+};
+
 const openFormModal = ():void=>{
   showLogRegForm.value = true;
-}
+};
+
 const closeFormModal = ():void=>{
   showLogRegForm.value = false;
-}
+};
 
 const updateIsAuthorized = async (value: boolean): Promise<void> => {
   useAuthStore().isAuthorized = value;
   useAuthStore().User = await profileEvent();
-}
+};
 
 const route = useRoute(),
-  currentFilmPage:number = route.params?.id;
+    currentFilmPage = Number(route.params?.id) || 0;
 
 if(!currentFilmPage){
   loadFilmRandom();
@@ -175,7 +191,7 @@ if(!currentFilmPage){
 
 <style scoped>
 .hero{
-  padding-top: 123px;
+  padding-top: 166px;
 }
 .hero__container{
   display: grid;
