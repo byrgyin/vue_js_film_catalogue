@@ -24,23 +24,18 @@ interface arrayLink{
 }
 const arraySocLink: arrayLink[] = [
   {
-    alt:'vk',
-    link:'https://www.google.com/',
-    img:'/vk.svg'
+    alt:'x.com',
+    link:'https://x.com/',
+    img:'/xcom.svg'
   },
   {
     alt:'youtube',
-    link:'https://www.google.com/',
+    link:'https://www.youtube.com/',
     img:'/youtube.svg'
   },
   {
-    alt:'ok',
-    link:'https://www.google.com/',
-    img:'/ok.svg'
-  },
-  {
     alt:'telegram',
-    link:'https://www.google.com/',
+    link:'https://telegram.org/',
     img:'/tg.svg'
   },
 ]

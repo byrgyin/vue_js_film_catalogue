@@ -142,15 +142,18 @@ checkAuthProfile();
   background-color: rgb(255 163 1);
 }
 @media (max-width: 1279px) {
+  .header{
+    padding: 10px 0;
+  }
+  .header__logo {
+    width: 60px;
+    height: 60px;
+  }
   .header__container{
     display: grid;
     grid-template-columns: 1fr repeat(3,max-content);
     grid-gap: 22px;
   }
-  /*.header__logo{*/
-  /*  width: 80px;*/
-  /*  height: 32px;*/
-  /*}*/
   .header__nav{
     display: none;
   }

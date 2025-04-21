@@ -1,6 +1,6 @@
 <template>
   <section class="my-account">
-    <div :class="['container',,{'hero__container--loading':!loading}]">
+    <div :class="['container',{'hero__container--loading':!loading}]">
       <h1 class="my-account__title">My Account</h1>
       <ul class="my-account__list">
         <li class="my-account__list-item">
@@ -16,6 +16,7 @@
             <FilmPreviewCard
               v-for="(film,index) in arrFavoriteFilms"
               :key="index"
+              :index="index + 1"
               :film="film"
               :deleteFilm="true"
               @update:reloadFavoritesFilm="loadFilms"
@@ -60,10 +61,12 @@ let loading = ref<boolean>(false);
 let arrFavoriteFilms = ref<IFilm[]>();
 const loadProfile = async ():Promise<void>=>{
   userProfile.value = await profileEvent();
-  abbr.value = makaAbbr(userProfile.value);
-  loading.value = true;
+  if(userProfile.value){
+    abbr.value = makaAbbr(userProfile.value);
+    loading.value = true;
+  }
 }
-const loadFilms = async (): Promise<[]>=>{
+const loadFilms = async (): Promise<void>=>{
   arrFavoriteFilms.value = await getFavoriteFilms();
   loading.value = true;
 }
@@ -76,7 +79,7 @@ const logOut = async ()=>{
   if(res.result){
     await router.push('/');
     useAuthStore().isAuthorized = false;
-    localStorage.setItem('isAuthorized',false);
+    localStorage.setItem('isAuthorized','false');
   }
 }
 
@@ -101,10 +104,13 @@ onMounted(()=>{
   }
 
   tabBtns.forEach((item,index)=>{
-    item.addEventListener('click',(event)=>{
+    item.addEventListener('click',(event: Event)=>{
+      const target = event.target as HTMLElement;
       clearClass();
       changeContentTab(index);
-      event.currentTarget.classList.add('my-account__button--active');
+      if(target){
+        target.classList.add('my-account__button--active');
+      }
     });
   });
 });

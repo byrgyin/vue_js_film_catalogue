@@ -3,7 +3,7 @@
     <button v-if="deleteFilm" @click="removeFilm" :data-id="film?.id" class="tom-films__item-delete"></button>
     <span v-if="index" class="tom-films__counter">{{ index }}</span>
     <router-link class="tom-films__link" :to="genre ? {name:'filmByGenre', params:{genre, id:film.id}} : {name:'film',params: {id: film.id}}">
-      <img class="tom-films__img" :src="film.posterUrl" :alt="film.title">
+      <img class="tom-films__img" :src="film.posterUrl" :alt="film.title" loading="lazy">
     </router-link>
   </li>
 </template>
@@ -16,7 +16,7 @@ defineProps<{
   film: IFilm;
   index: number;
   genre?:string;
-  deleteFilm:boolean;
+  deleteFilm?: boolean;
 }>();
 const emit = defineEmits<{
   (e: 'update:reloadFavoritesFilm', value: boolean): void;

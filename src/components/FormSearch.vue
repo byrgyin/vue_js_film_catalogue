@@ -27,7 +27,7 @@ import {fetchSearchResultsFilms} from "../../api/fetchFilms.ts";
 import {calculateTime} from "../../api/calculateTime.ts";
 import {calculateRatingFilm} from "../../api/calculateRatingFilm.ts";
 
-const props = defineProps<{
+defineProps<{
   isOpenForm: boolean;
 }>();
 const emit = defineEmits<{
@@ -51,11 +51,10 @@ const cancelStandadrForm = (event:Event):void=>{
   event.preventDefault();
 }
 const disableSearch = (event:Event):void=>{
-  if(event.target instanceof HTMLInputElement){
-    if(!event.target.closest('.form-search__input')){
-      emit('update:isOpenForm',false);
-      searchResult.value = [];
-    }
+  const target = event.target as HTMLInputElement;
+  if(!target?.closest('.form-search__input')){
+    emit('update:isOpenForm',false);
+    searchResult.value = [];
   }
 }
 </script>
@@ -236,6 +235,14 @@ const disableSearch = (event:Event):void=>{
   .form-search__list{
     display: flex;
     overflow: auto;
+  }
+  .form-search__list::-webkit-scrollbar{
+    width: 10px;
+    background-color: #fff;
+  }
+  .form-search__list::-webkit-scrollbar-thumb{
+    background-color: rgb(255 163 1);
+    border-radius: 10px;
   }
   .form-search__link{
     grid-template-columns: 1fr;

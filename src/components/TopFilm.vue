@@ -59,6 +59,14 @@ loadTopFilms();
     margin: 0 -20px;
     padding: 70px 20px 70px 20px;
   }
+  .tom-films__list::-webkit-scrollbar{
+    width: 10px;
+    background-color: #fff;
+  }
+  .tom-films__list::-webkit-scrollbar-thumb{
+    background-color: rgb(255 163 1);
+    border-radius: 10px;
+  }
   .tom-films__item{
     width: 224px;
     height: 336px;

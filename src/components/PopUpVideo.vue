@@ -15,8 +15,9 @@ defineProps<{
 const emit = defineEmits<{
   (e: 'close'): void;
 }>();
-const closePopUp = (event):void=>{
-  if(event.target.classList.contains('popup__overlay') || event.target.classList.contains('popup__close-button')){
+const closePopUp = (event: Event):void=>{
+  const target = event.target as HTMLElement;
+  if(target?.classList.contains('popup__overlay') || target?.classList.contains('popup__close-button')){
     emit('close');
   }
 }
@@ -64,7 +65,8 @@ const closePopUp = (event):void=>{
   border: none;
   outline: none;
   border-radius: 50%;
-  background-color: #fff;
+  background-color: #000;
+  box-shadow: 1px 1px 16px -3px #fff;
 }
 .popup__close-button:before,
 .popup__close-button:after{
@@ -72,7 +74,7 @@ const closePopUp = (event):void=>{
   display: block;
   width: 20px;
   height: 3px;
-  background-color: #000;
+  background-color: #ffffff;
   position: absolute;
   top: 50%;
   left: 50%;

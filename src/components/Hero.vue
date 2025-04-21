@@ -34,7 +34,7 @@
           </li>
         </ul>
       </div>
-      <img class="hero__img" :src="film?.posterUrl" :alt="film?.title">
+      <img class="hero__img" :src="film?.posterUrl" :alt="film?.title" loading="eager">
     </div>
     <div v-if="currentFilmPage && film" class="container hero__container-about">
       <h2>About Film</h2>
@@ -85,14 +85,13 @@ import {calculateRatingFilm} from "../../api/calculateRatingFilm.ts";
 import PopUpVideo from "./PopUpVideo.vue";
 import formatMoney from "../../api/formatMoney.ts";
 import {useAuthStore} from "../stores/authStores.ts";
-import {getFavoriteFilms, profileEvent} from "../../api/authToServer.ts";
+import {addFavoriteFilms, getFavoriteFilms, profileEvent, removeFavoriteFilms} from "../../api/authToServer.ts";
 import LogRegistrationForm from "./LogRegistrationForm.vue";
 
 interface Rating {
   color: string;
   num: string;
 }
-
 
 const film = ref<IFilm | null>(null);
 const filmsFavorite = ref<IFilm[]>()
@@ -153,14 +152,15 @@ const callPopUp = (event: Event):void=>{
 const toggleFilm = async (event: Event): Promise<void>=>{
   const target = event.currentTarget as HTMLElement;
   const filmId = {
-    id:target.getAttribute('data-id-film') || ''
-  },
-  movieAdded = target.getAttribute('data-addfilm') === "true";
+        id:target.getAttribute('data-id-film')
+      };
+  const movieAdded = target.getAttribute('data-addfilm') === "true";
+
   if(!movieAdded){
-    // const res = await addFavoriteFilms(filmId);
+    await addFavoriteFilms(filmId);
     addedFilm.value = true;
   } else {
-    // const res = await removeFavoriteFilms(filmId.id);
+    await removeFavoriteFilms(Number(filmId?.id));
     addedFilm.value = false;
   }
 };
@@ -268,11 +268,13 @@ if(!currentFilmPage){
   transition: background-color ease .3s;
 }
 .hero__item-button:first-child .hero__button{
-  background: rgba(103, 165, 235, 1);
+  background: rgb(255 163 1);
+  color: #000;
 }
 .hero__button:hover,
 .hero__button-circle:hover{
-  background: rgba(103, 165, 235, 1);
+  background: rgb(255 163 1);
+  color: #000;
 }
 .hero__img{
   display: block;
@@ -362,7 +364,7 @@ if(!currentFilmPage){
   .hero__item-attr {
     white-space: unset;
     flex-flow: column;
-    border: 1px dashed #fff;
+    border: 1px dashed rgb(255 163 1);
     border-radius: 8px;
     padding: 5px;
   }

@@ -4,13 +4,20 @@ body {
   line-height: 1.5;
   font-weight: 400;
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
+  color: #fff;
   background: #000;
   margin: 0;
   padding: 0;
-
 }
 
+body::-webkit-scrollbar {
+  width: 10px;
+  background-color: #fff;
+}
+body::-webkit-scrollbar-thumb {
+  background-color: rgb(255 163 1);
+  border-radius: 10px;
+}
 a {
   font-weight: 500;
   color: inherit;

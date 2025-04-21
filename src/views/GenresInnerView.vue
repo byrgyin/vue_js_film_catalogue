@@ -8,6 +8,7 @@
         <FilmPreviewCard
           v-for="(film,index) in filmArray"
           :key="index"
+          :index="index + 1"
           :film="film"
           :genre="genre"
         />
@@ -43,8 +44,10 @@ const loadMoreFilms = async (genre:string)=>{
   if(res.length === 0){
     showBtnLoadMore.value = false
   }
-  filmArray.value.push(...res);
-  loading.value = true;
+  if(filmArray.value){
+    filmArray.value.push(...res);
+    loading.value = true;
+  }
 }
 loadFilms(genre.value);
 </script>
@@ -86,8 +89,8 @@ loadFilms(genre.value);
   margin: 0 auto;
   padding: 16px 48px;
   width: fit-content;
-  color: #fff;
-  background: rgba(103, 165, 235, 1);
+  background: rgb(255 163 1);
+  color: #000;
   border: none;
   outline: none;
   border-radius: 28px;

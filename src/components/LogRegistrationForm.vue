@@ -3,7 +3,7 @@
     <span @click="closeForm(false)" class="auth-wrapper__bg"></span>
     <div class="auth-wrapper__form-block">
       <button @click="closeForm(false)" class="auth-wrapper__close"></button>
-      <img class="auth-wrapper__logo" src="/form_logo.svg" alt="form logo">
+      <img class="auth-wrapper__logo" src="/logo.png" alt="form logo">
 
       <form @submit="submitLog" @submit.prevent="cancelStandadrForm" v-if="showForm" class="auth-wrapper__login"  method="POST"  enctype="application/x-www-form-urlencoded">
         <input type="email" class="auth-wrapper__input" name="email" placeholder="Электронная почта" required>
@@ -40,7 +40,7 @@ import {ref} from "vue";
 import {regisrationEvent,loginEvent} from "../../api/authToServer.ts";
 
 
-const props = defineProps<{
+defineProps<{
   showLogRegForm:boolean;
   // imLogIn:boolean;
 }>();
@@ -91,7 +91,7 @@ const submitLog = async (event:Event): Promise<void>=>{
   const responseLogin = await loginEvent(data);
   if(responseLogin.data.result){
     closeForm(responseLogin.data.result);
-    localStorage.setItem('isAuthorized',true);
+    localStorage.setItem('isAuthorized','true');
   }
 }
 
@@ -128,15 +128,17 @@ const submitLog = async (event:Event): Promise<void>=>{
   z-index: 1;
   width: 100%;
   max-width: 420px;
-  background-color: #fff;
+  background-color: #000;
   padding: 60px 40px;
   border-radius: 24px;
+  box-shadow: 0 4px 70px 8px rgb(255 255 255 / 44%);
 }
 .auth-wrapper__logo{
   display: block;
   margin: 0 auto 40px;
-  width: 156px;
-  height: 35px;
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
 }
 .auth-wrapper__signing,
 .auth-wrapper__login,
@@ -160,7 +162,7 @@ const submitLog = async (event:Event): Promise<void>=>{
   line-height: 32px;
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
-  color: var(--content-black, rgba(0, 0, 0, 1));
+  color: #fff;
 }
 
 .auth-wrapper__input{
@@ -201,8 +203,8 @@ const submitLog = async (event:Event): Promise<void>=>{
 .auth-wrapper__input:focus,
 .auth-wrapper__input:focus-within,
 .auth-wrapper__input:focus-visible{
-  border: 1px solid var(--content-active, rgba(180, 169, 255, 1));
-  outline: 1px solid var(--content-active, rgba(180, 169, 255, 1));
+  border: 1px solid rgb(255 163 1);
+  outline: 1px solid rgb(255 163 1);
 }
 .auth-wrapper__input:invalid:focus{
   border: 1px solid rgba(255, 117, 117, 1);
@@ -222,15 +224,16 @@ const submitLog = async (event:Event): Promise<void>=>{
 .auth-wrapper__button{
   width: 100%;
   padding: 16px 60px;
-  color: #fff;
+  color: #000;
   font-size: 18px;
   font-weight: 700;
   line-height: 24px;
   text-align: center;
-  background: rgba(103, 165, 235, 1);
+  background: rgb(255 163 1);
   outline: none;
   border: none;
   border-radius: 28px;
+
 }
 .auth-wrapper__already-access{
   display: block;
@@ -238,6 +241,7 @@ const submitLog = async (event:Event): Promise<void>=>{
   margin: 0;
   width: 100%;
   background-color: transparent;
+  color: #fff;
   outline: none;
   border: none;
   font-size: 18px;
@@ -258,9 +262,10 @@ const submitLog = async (event:Event): Promise<void>=>{
   width: 48px;
   height: 48px;
   border-radius: 24px;
-  background-color: #fff;
+  background-color: #000;
   border:none;
   outline: none;
+  box-shadow: 0 4px 70px 8px rgb(255 255 255 / 44%);
 }
 .auth-wrapper__close:before,
 .auth-wrapper__close:after{
@@ -271,7 +276,7 @@ const submitLog = async (event:Event): Promise<void>=>{
   right: 50%;
   width: 18px;
   height: 2px;
-  background-color: #000;
+  background-color: #fff;
 }
 .auth-wrapper__close:before{
   transform: translate(50%,50%) rotate(45deg);

@@ -61,14 +61,15 @@ const router = createRouter({
   ]
 });
 
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async (to, _from, next) => {
   let title:string =  (to.meta.title as string | undefined) || 'My app';
   let description:string = (to.meta.description as string | undefined) || 'Default description for My App';
 
 
   if(to.name === 'genre' && to.params.genre) {
-    title = `Genre: ${to.params.genre.charAt(0).toUpperCase() + to.params.genre.slice(1)}`;
-    description = `Browse movies in the ${to.params.genre} genre`;
+    const genre = Array.isArray(to.params.genre) ? to.params.genre[0] : to.params.genre;
+    title = `Genre: ${genre.charAt(0).toUpperCase() + genre.slice(1)}`;
+    description = `Browse movies in the ${genre} genre`;
   } else if(to.name === 'film' || to.name === 'filmByGenre'){
     const idFilm:number = Number(to.params.id);
     const film = await fetchFilm(idFilm);
